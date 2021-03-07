@@ -1,3 +1,4 @@
+import { logger } from '../services/logger/logger.js'
 import { makeDestructuredPromise } from './makeDestructuredPromise.js'
 
 interface Config {
@@ -17,8 +18,8 @@ export async function runWithRetries<T>(func: () => T, initialConfig?: Partial<C
 		resolve(await func())
 	} catch (e) {
 		if (!config.silent) {
-			console.warn(e)
-			console.warn(`${config.name} failed. Retrying again in ${config.retryTime}ms`)
+			logger.warn(e)
+			logger.warn(`${config.name} failed. Retrying again in ${config.retryTime}ms`)
 		}
 		if (config.retries <= 1) return Promise.reject('ERROR_RETRIES_FAILED')
 		setTimeout(() => {
